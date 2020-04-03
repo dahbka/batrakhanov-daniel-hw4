@@ -3,7 +3,8 @@ package com.example.batrakhanov_daniel_hw4
 import org.junit.Test
 
 import org.junit.Assert.*
-import kotlin.math.truncate
+import kotlin.math.round
+import kotlin.math.roundToInt
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -55,11 +56,9 @@ interface PricePrinter {
 }
 
 class CleanKotlinPricePrinter : PricePrinter {
-    override fun print(price: Double) {
-        when {
-            price % 1.0 >= 1e-8 -> println("Цена товара - ${"%.2f".format(price)} ₽")
-            else -> println("Цена товара - ${price.toInt()} ₽")
-        }
+    override fun print(price: Double) = when {
+        price % 1.0 >= 1e-8 -> println("Цена товара - ${round(price*100)/100} ₽")
+        else -> println("Цена товара - ${price.roundToInt()} ₽")
     }
 }
 
