@@ -3,6 +3,7 @@ package com.example.batrakhanov_daniel_hw4
 import org.junit.Test
 
 import org.junit.Assert.*
+import kotlin.math.truncate
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -16,10 +17,12 @@ class ExampleUnitTest {
 
         val iphoneCase = Product(price = 123.5, salePercent = 30)
 
-        val pricePrinter: PricePrinter = <...>
+        val pricePrinter: PricePrinter = CleanKotlinPricePrinter()
 
         val discountIphoneCasePrice = iphoneCase.calcDiscountPrice()
         pricePrinter.print(discountIphoneCasePrice)
+        val intInputCheck =3.0
+        pricePrinter.print(intInputCheck)
     }
 }
 
@@ -42,9 +45,18 @@ class Product(
 interface PricePrinter {
 
     /**
-     * Outputs price in <PRICE>P format.
+     * Outputs price in <PRICE>₽ format.
      * If price have not fractional part than it will be printed as integer
      * If price have fractional part than it will be rounded for 2 symbols after "."
      */
     fun print(price: Double)
 }
+class CleanKotlinPricePrinter : PricePrinter {
+    override fun print(price: Double) {
+        when {
+            price % 1.0 >= 1e-8 -> println("Цена товара - ${"%.2f".format(price)} ₽")
+            else -> println("Цена товара - ${price.toInt()} ₽")
+        }
+    }
+}
+
