@@ -17,15 +17,16 @@ class ExampleUnitTest {
     fun example() {
 
         val iphoneCase = Product(price = 123.5, salePercent = 30)
-
+        val samsungCase = Product(price = 123.5, salePercent = 30)
         val pricePrinter: PricePrinter = CleanKotlinPricePrinter()
 
         val discountIphoneCasePrice = iphoneCase.calcDiscountPrice()
         pricePrinter.print(discountIphoneCasePrice)
 
-        val newPricePrinter : PricePrinter= NewPricePrinter()
-        val intInputCheck =3.0
-        newPricePrinter.print(intInputCheck)
+        val products = listOf( iphoneCase, samsungCase)
+        val testCart= ShoppingCart(products)
+        val cartPricePrinter = ShoppingCartPricePrinter()
+        cartPricePrinter.print(testCart.getFinalPrice())
     }
 }
 
@@ -62,7 +63,7 @@ class CleanKotlinPricePrinter : PricePrinter {
     }
 }
 
-class NewPricePrinter : PricePrinter {
+class ShoppingCartPricePrinter :PricePrinter {
     override fun print(price: Double) {
         when {
             price % 1.0 >= 1e-8 -> println("Цена товара - ${"%.2f".format(price)} ₽")
@@ -71,4 +72,13 @@ class NewPricePrinter : PricePrinter {
     }
 }
 
+class ShoppingCart ( products: List<Product>) {
+    private var overallPrice: Double = 0.0
+    init {
+            for (item in products) {
+                this.overallPrice = this.overallPrice+ item.calcDiscountPrice()
+            }
+    }
+    fun getFinalPrice() :Double = this.overallPrice
+}
 
